@@ -24,8 +24,6 @@ COPY --from=build /pb/pocketbase /pb/pocketbase
 # Copiar los datos por defecto a una ubicación temporal
 COPY pb_data /pb/default_pb_data
 
-VOLUME ["/pb/pb_data"]
-
 # Copiar el script de inicio y darle permisos de ejecución
 COPY entrypoint.sh /pb/entrypoint.sh
 
