@@ -4,15 +4,11 @@ FROM golang:1.22.3-alpine AS build
 # Crear directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de tu proyecto
-COPY go.mod go.sum ./
-RUN go mod tidy
-
 # Copiar el resto del código fuente
 COPY . .
 
 # Compilar PocketBase personalizado
-RUN go build -o /pb/pocketbase main.go
+RUN go build -o /pb/pocketbase 
 
 # Etapa 2: Imagen final optimizada
 FROM alpine:latest
