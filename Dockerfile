@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Instalar certificados necesarios para conexiones HTTPS
-# RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates
 
 # Crear directorio de trabajo
 WORKDIR /pb
