@@ -1,0 +1,6 @@
+
+pocketbase
+
+.vscode/
+pb_data/*.db-shm
+pb_data/*.db-wal
