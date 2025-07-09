@@ -1,18 +1,17 @@
 #!/bin/sh
 
-# Crear el directorio si no existe
+# Ensure pb_data directory exists
 mkdir -p /pb/pb_data
 
-# Verificar si el directorio /pb/pb_data tiene archivos válidos
-# Excluimos "lost+found" y archivos con extensión .db
+# Check if pb_data is empty (ignoring .db files and lost+found)
 VALID_FILES=$(find /pb/pb_data -mindepth 1 -not -name 'lost+found' -not -name '*.db' | wc -l)
 
 if [ "$VALID_FILES" -eq 0 ]; then
-    echo "📂 Volumen vacío o solo con archivos no válidos. Copiando datos por defecto..."
+    echo "📂 Empty or non-valid volume detected. Copying default data..."
     cp -R /pb/default_pb_data/* /pb/pb_data/
 else
-    echo "✅ Datos existentes encontrados, saltando inicialización."
+    echo "✅ Existing data detected. Skipping initialization."
 fi
 
-# Ejecutar PocketBase
+# Run PocketBase
 exec /pb/pocketbase serve --http=0.0.0.0:8080
