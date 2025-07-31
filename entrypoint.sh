@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# Ensure pb_data directory exists
 mkdir -p /pb/pb_data
 
 # Check if pb_data is empty (ignoring .db files and lost+found)
