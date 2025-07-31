@@ -1,0 +1,52 @@
+name: PocketBase CI/CD
+
+on:
+  push:
+    branches:
+      - develop 
+
+env:
+  DOCKER_IMAGE_NAME: isaidiaz/nexo_backend 
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Verificar archivos necesarios
+        run: |
+          [ -f "pocketbase" ] && echo "Binario de PocketBase encontrado." || { echo "Error: Binario de PocketBase no encontrado."; exit 1; }
+          [ -f "Dockerfile" ] && echo "Dockerfile encontrado." || { echo "Error: Dockerfile no encontrado."; exit 1; }
+          [ -f "entrypoint.sh" ] && echo "Script entrypoint.sh encontrado." || { echo "Error: Script entrypoint.sh no encontrado."; exit 1; }
+
+      - name: Iniciar sesión en Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Construir la imagen de Docker
+        id: docker_build
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false 
+          tags: ${{ env.DOCKER_IMAGE_NAME }}:latest
+
+      - name: Subir la imagen a Docker Hub
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE_NAME }}:latest
+            ${{ env.DOCKER_IMAGE_NAME }}:${{ github.run_number }}
