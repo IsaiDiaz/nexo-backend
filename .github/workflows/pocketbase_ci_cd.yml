@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - develop
-    tags:
-      - 'v*.*.*'
 
 env:
   DOCKER_IMAGE_NAME: isaidiazpro/nexo_backend 
@@ -37,4 +35,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ env.DOCKER_IMAGE_NAME }}:${{ github.ref_name }}
+          tags: ${{ env.DOCKER_IMAGE_NAME }}:latest,${{ env.DOCKER_IMAGE_NAME }}:${{ github.run_number }}
